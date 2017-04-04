@@ -1,0 +1,10 @@
+{
+    "jobId": "116930145085016",
+    "urls": [
+        "http:\/\/54.171.150.242\/api\/v1\/staticmap\/png\/nyborg?baselayer=&layers=&size=500x500&bbox=10.641675,55.242973,10.704932,55.280388&lifetime=9999999",
+        "http:\/\/54.171.150.242\/api\/v1\/staticmap\/png\/nyborg?baselayer=&layers=kommuneplan13.boligomraader&size=500x500&bbox=10.653369,55.249248,10.684998,55.267957&lifetime=9999999",
+        "http:\/\/54.171.150.242\/api\/v1\/staticmap\/png\/nyborg?baselayer=&layers=kommuneplan13.erhvervsudvikling&size=500x500&bbox=10.641481,55.25052,10.712421,55.271282&lifetime=9999999",
+        "http:\/\/54.171.150.242\/api\/v1\/staticmap\/png\/nyborg?baselayer=&layers=kommuneplan13.detailhandel&size=500x500&bbox=10.657371,55.252434,10.69284,55.262816&lifetime=9999999",
+        "http:\/\/54.171.150.242\/api\/v1\/staticmap\/png\/nyborg?baselayer=&layers=kommuneplan13.groenne_omraader&size=500x500&bbox=10.657371,55.252434,10.69284,55.262816&lifetime=9999999"
+    ]
+}
