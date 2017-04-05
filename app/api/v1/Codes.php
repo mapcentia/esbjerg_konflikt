@@ -15,13 +15,22 @@ class Codes extends \app\inc\Controller
         $this->host = "http://staticmap.mapcentia.com";
     }
 
-    public function get_index()
+    public function get_ref()
     {
 
-
+        $varName = Input::get("vn");
         $this->codes = new \app\models\Codes();
 
-        return ["data" => $this->codes->write()];
+        return ["data" => $this->codes->getRefs($varName)];
+    }
+
+    public function get_field()
+    {
+
+        $varName = Input::get("vn");
+        $this->codes = new \app\models\Codes();
+
+        return ["data" => $this->codes->getFields($varName, Input::getPath()->part(4))];
     }
 
 }

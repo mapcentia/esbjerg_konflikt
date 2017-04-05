@@ -30,6 +30,8 @@ class Search extends \app\inc\Model
 
         $url = $service . $qstr;
 
+        //die($url);
+
         //$res = json_decode(Util::wget($url), true);
 
         $ch = curl_init($service);
@@ -45,7 +47,7 @@ class Search extends \app\inc\Model
 
         curl_close($ch);
 
-//        die($res);
+        //die($res);
 
 
         $Arealbindninger = new Arealbindninger();
@@ -106,7 +108,6 @@ class Search extends \app\inc\Model
         }
 
         arsort($bindings);
-        print_r($bindings);
 
         $query = "DELETE FROM kommuneplan18.bindninger WHERE enrid =:id";
         $res = $this->prepare($query);
@@ -126,6 +127,8 @@ class Search extends \app\inc\Model
             $response['code'] = 400;
             return $response;
         }
+
+        $response["data"] = $bindings;
 
 
         return $response;
