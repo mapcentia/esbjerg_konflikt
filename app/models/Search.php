@@ -8,10 +8,12 @@ class Search extends \app\inc\Model
 {
 
 
-    public function go($id)
+    public function go($id, $overwrite = true)
     {
         $bindings = [];
-        $query = "SELECT ST_Astext(the_geom) as wkt FROM kommuneplan18.kpplandk2 WHERE enrid =:id";
+
+
+        $query = "SELECT * FROM kommuneplan18.bindninger WHERE enrid =:id";
         $res = $this->prepare($query);
         try {
             $res->execute(array("id" => $id));
@@ -22,113 +24,134 @@ class Search extends \app\inc\Model
             return $response;
         }
         $row = $this->fetchRow($res);
-        $response['success'] = true;
-        $response['data'] = $row["wkt"];
+        $exist = $row ? true : false;
 
-        $service = "http://webkort.esbjergkommune.dk/cbkort?";
-        $qstr = "page=fkgws1-konflikt&sagstype=std_soegning&outputformat=json&raw=false&geometri=" . urlencode($response['data']);
-
-        $url = $service . $qstr;
-
-        //die($url);
-
-        //$res = json_decode(Util::wget($url), true);
-
-        $ch = curl_init($service);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $qstr);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+        
+        if (($overwrite) || (!$exist)) {
 
 
-        $res = json_decode(curl_exec($ch), true);
+            $query = "SELECT ST_Astext(the_geom) as wkt FROM kommuneplan18.kpplandk2 WHERE enrid =:id";
+            $res = $this->prepare($query);
+            try {
+                $res->execute(array("id" => $id));
+            } catch (\PDOException $e) {
+                $response['success'] = false;
+                $response['message'] = $e->getMessage();
+                $response['code'] = 400;
+                return $response;
+            }
+            $row = $this->fetchRow($res);
+            $response['success'] = true;
+            $response['data'] = $row["wkt"];
 
-        curl_close($ch);
+            $service = "http://webkort.esbjergkommune.dk/cbkort?";
+            $qstr = "page=fkgws1-konflikt&sagstype=std_soegning&outputformat=json&raw=false&geometri=" . urlencode($response['data']);
 
-        //die($res);
+            $url = $service . $qstr;
+
+            //die($url);
+
+            //$res = json_decode(Util::wget($url), true);
+
+            $ch = curl_init($service);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $qstr);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 0);
 
 
-        $Arealbindninger = new Arealbindninger();
+            $res = json_decode(curl_exec($ch), true);
 
-        $themes = $Arealbindninger->get();
+            curl_close($ch);
+
+            //die($res);
 
 
-        foreach ($themes["data"] as $theme) {
+            $Arealbindninger = new Arealbindninger();
 
-            foreach ($res["row"][0]["row"][0]["row"] as $resArr) {
+            $themes = $Arealbindninger->get();
 
-                $attrs = [];
-                for ($i = 0; $i < sizeof($resArr["row"]); $i++) {
-                    if (isset($resArr["row"][$i]["targetname"])) {
-                        $targetname = $resArr["row"][$i]["targetname"];
-                    }
-                    if (isset($resArr["row"][$i]["count"])) {
-                        $count = $resArr["row"][$i]["count"];
-                    }
 
-                    if (isset($resArr["row"][$i]["row"])) {
-                        foreach ($resArr["row"][$i]["row"] as $r) {
-                            if ($theme["sps_themename"] == "theme-" . $targetname && (isset($theme["bindattribut"]) && isset($theme["bindvalue"]) && $theme["bindattribut"] != "" && $theme["bindvalue"] != "")) {
-                                // print_r($r);
-                                $attrs[] = $r["value"];
+            foreach ($themes["data"] as $theme) {
+
+                foreach ($res["row"][0]["row"][0]["row"] as $resArr) {
+
+                    $attrs = [];
+                    for ($i = 0; $i < sizeof($resArr["row"]); $i++) {
+                        if (isset($resArr["row"][$i]["targetname"])) {
+                            $targetname = $resArr["row"][$i]["targetname"];
+                        }
+                        if (isset($resArr["row"][$i]["count"])) {
+                            $count = $resArr["row"][$i]["count"];
+                        }
+
+                        if (isset($resArr["row"][$i]["row"])) {
+                            foreach ($resArr["row"][$i]["row"] as $r) {
+                                if ($theme["sps_themename"] == "theme-" . $targetname && (isset($theme["bindattribut"]) && isset($theme["bindvalue"]) && $theme["bindattribut"] != "" && $theme["bindvalue"] != "")) {
+                                    // print_r($r);
+                                    $attrs[] = $r["value"];
+                                }
                             }
                         }
                     }
-                }
-                if (sizeof($attrs) > 0) {
-                    echo $theme["sps_themename"] . " -> " . $theme["bindattribut"] . "\n";
-                    print_r($attrs);
-                    print_r($resArr);
-
-                }
-
-                if ($theme["sps_themename"] == "theme-" . $targetname && $count > 0) {
-
-                    if (isset($theme["bindattribut"]) && isset($theme["bindvalue"]) && $theme["bindattribut"] != "" && $theme["bindvalue"] != "") {
-
-                        foreach ($attrs as $k => $v) {
-
-                            if ($v == $theme["bindvalue"]) {
-                                $bindings[$theme["rammefelt"]] = $theme["rammevalue"];
-                            }
-
-                        }
-
-                    } else {
-                        $bindings[$theme["rammefelt"]] = $theme["rammevalue"];
+                    if (sizeof($attrs) > 0) {
+                        echo $theme["sps_themename"] . " -> " . $theme["bindattribut"] . "\n";
+                        print_r($attrs);
+                        print_r($resArr);
 
                     }
 
-                } else if ($theme["sps_themename"] == "theme-" . $targetname && $count == 0) {
-                    $bindings[$theme["rammefelt"]] = null;
+                    if ($theme["sps_themename"] == "theme-" . $targetname && $count > 0) {
+
+                        if (isset($theme["bindattribut"]) && isset($theme["bindvalue"]) && $theme["bindattribut"] != "" && $theme["bindvalue"] != "") {
+
+                            foreach ($attrs as $k => $v) {
+
+                                if ($v == $theme["bindvalue"]) {
+                                    $bindings[$theme["rammefelt"]] = $theme["rammevalue"];
+                                }
+
+                            }
+
+                        } else {
+                            $bindings[$theme["rammefelt"]] = $theme["rammevalue"];
+
+                        }
+
+                    } else if ($theme["sps_themename"] == "theme-" . $targetname && $count == 0) {
+                        $bindings[$theme["rammefelt"]] = null;
+                    }
                 }
             }
+
+            arsort($bindings);
+
+
+            $query = "DELETE FROM kommuneplan18.bindninger WHERE enrid =:id";
+            $res = $this->prepare($query);
+            try {
+                $res->execute(array("id" => $id));
+            } catch (\PDOException $e) {
+                echo "Fandtes ikke\n";
+            }
+
+            $query = "INSERT INTO kommuneplan18.bindninger (enrid, bindninger) VALUES (:id, :bindninger)";
+            $res = $this->prepare($query);
+            try {
+                $res->execute(array("id" => $id, "bindninger" => json_encode($bindings)));
+            } catch (\PDOException $e) {
+                $response['success'] = false;
+                $response['message'] = $e->getMessage();
+                $response['code'] = 400;
+                return $response;
+            }
+            $response["data"] = $bindings;
+
+        } else {
+            $response["message"] = "Skipper";
         }
-
-        arsort($bindings);
-
-        $query = "DELETE FROM kommuneplan18.bindninger WHERE enrid =:id";
-        $res = $this->prepare($query);
-        try {
-            $res->execute(array("id" => $id));
-        } catch (\PDOException $e) {
-            echo "Fandtes ikke\n";
-        }
-
-        $query = "INSERT INTO kommuneplan18.bindninger (enrid, bindninger) VALUES (:id, :bindninger)";
-        $res = $this->prepare($query);
-        try {
-            $res->execute(array("id" => $id, "bindninger" => json_encode($bindings)));
-        } catch (\PDOException $e) {
-            $response['success'] = false;
-            $response['message'] = $e->getMessage();
-            $response['code'] = 400;
-            return $response;
-        }
-
-        $response["data"] = $bindings;
 
 
         return $response;

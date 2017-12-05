@@ -13,9 +13,9 @@ $sql = "SELECT * FROM kommuneplan18.kpplandk2";
 $result = $conn->execQuery($sql);
 echo $conn->PDOerror[0];
 $count = 0;
+$search = new \app\models\Search();
 
 while ($row = $conn->fetchRow($result)) {
-    $search = new \app\models\Search();
     $res = $search->go($row["enrid"]);
 
     print_r($res);

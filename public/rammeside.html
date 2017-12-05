@@ -1,6 +1,8 @@
-<script src="http://cdn.eu1.mapcentia.com/js/openlayers/proj4js-combined.js"></script>
-<script src="http://beta.mygeocloud.cowi.webhouse.dk/js/openlayers/defs/EPSG25832.js"></script>
+<script src="http://cowi.mapcentia.com/js/openlayers/proj4js-combined.js"></script>
+<script src="http://cowi.mapcentia.com/js/openlayers/defs/EPSG25832.js"></script>
 <script src="http://mapcentia.github.io/esbjerg/code2map.js"></script>
+<script src="http://esbjerg-kp18.mapcentia.com/api/v1/codes/ref?vn=ref_codes"></script>
+<script src="http://esbjerg-kp18.mapcentia.com/api/v1/codes/field?vn=bind"></script>
 <script>
     var gc2RammeMap = (function () {
         return {
@@ -43,98 +45,12 @@
                     kva3: "Kvalitetsbestemmelser 3",
                     kva4: "Kvalitetsbestemmelser 4"
                 };
-                var bind = {
-                    b_p3besk: "§3 Beskyttelse",
-                    b_marsk: "Bebyggelse i Marsken",
-                    r_do: "Indvindingsopland",
-                    b_lin: "Beskyttelseslinier",
-                    b_bygskik: "Byggeskik og bebyggelsesforhold",
-                    t_elspor: "El-jernbanedrift",
-                    b_ex: "Exner-Fredning",
-                    t_fjv: "Fjernvarmeledninger",
-                    b_fa: "Forsvarets arealer",
-                    t_olie: "Forsvarets olieledning",
-                    b_fmbesk: "Fortidsmindebeskyttelseslinie",
-                    b_fred: "Fredndsdsding",
-                    b_skf: "Fredskov",
-                    t_fyrl: "Fyrlinier",
-                    b_gen: "Generelt P3 beskyttet område",
-                    b_geo: "Geologisk værdi",
-                    r_vo: "Grundvandsbeskyttelse – NFI og OSD test",
-                    b_havd: "Havdige",
-                    b_khm: "Historiske landskaber",
-                    t_aff: "Hovedkloakledning",
-                    t_hsti: "Hovedstiforbindelser",
-                    t_hvl: "Hovedvandledning",
-                    t_hl: "Højspændingskorridorer",
-                    db_jb: "Jernbanestøjisolinie",
-                    t_jbt: "Jernbanetrace",
-                    b_jordfu: "Jordforurening",
-                    r_vk: "Boringsnært beskyttelsesområde",
-                    b_kibesk: "Kirkebeskyttelseslinie",
-                    b_ko: "Kirkeomgivelser",
-                    b_kliris: "Klimarisikoområder",
-                    b_klitfr: "Klitfredning",
-                    r_rk: "Klæginteresseområde",
-                    b_kvf: "Kollektiv Varmeforsyning",
-                    b_ka: "Kulturlevn",
-                    b_atl: "Kulturmiljø",
-                    b_kbz: "Kystnære Byzoner",
-                    b_kyst: "Kystnærhedszonen",
-                    b_lkaro: "Landskabskarakterområder",
-                    b_lav: "Lavbundsarealer",
-                    m_hg: "Lufthavnshøjdegrænseplan",
-                    db_lh: "Lufthavnsstøjisolinie",
-                    db_mb: "Motorbanestøjisolinie",
-                    b_ms: "Målsatte søer",
-                    b_mv: "Målsatte vandløb",
-                    b_int: "Natura 2000",
-                    b_nat: "Naturbeskyttelse",
-                    t_gas: "Naturgas",
-                    b_pzrivi: "Planlægningszone for risikovirksomhed",
-                    b_pona: "Potentiel Natur",
-                    t_vej: "Primærvej",
-                    t_ra: "Radiokæder",
-                    b_resvej: "Reserverede veje",
-                    b_skr: "Reserveret til skov",
-                    r_rg: "Råstofgraveområde",
-                    r_ri: "Råstofinteresseområde",
-                    b_sbyg: "Sammenhængende bebyggelser",
-                    b_szrivi: "Sikkerhedszone for risikovirksomhed",
-                    b_skbesk: "Skovbeskyttelseslinie",
-                    b_sk: "Skovområde",
-                    b_skj: "Skovrejsning",
-                    b_sk0: "Skovrejsning uønsket",
-                    db_sk: "Skydebanestøjisolinie",
-                    b_sjd: "Sten og jorddiger",
-                    b_shd: "Store Husdyrbrug",
-                    b_stbesk: "Strandbeskyttelseslinie",
-                    db_bi: "Støjisolinier",
-                    b_sshl: "Større Sammenhængende landskaber",
-                    b_stl: "Større uforstyrrede landskaber",
-                    b_svls: "Særlige Værdifulde Landbrugsområder",
-                    b_sobesk: "Søbeskyttelseslinie",
-                    ter_kot3: "Terrænkoter under +3,90 DVR90.",
-                    ter_kot4: "Terrænkoter under +4,75 DVR90.",
-                    b_dekl: "Tinglyst bevaringsdeklaration",
-                    b_vahafr: "Vadehavsfredning",
-                    db_vejk: "Vejstøj ved vejkant",
-                    db_vej: "Vejstøjisolinie",
-                    db_vind: "Vindmøllestøjisolinie",
-                    db_virk: "Virksomhedsstøjisolinie",
-                    b_vbgr: "Værdifulde byrum",
-                    b_kl: "Værdifulde kystlandskaber",
-                    b_lb: "Værdifulde landbrugsområder",
-                    b_ls: "Værdifulde landskaber",
-                    b_oko: "Økologiske forbindelser",
-                    b_aabesk: "Aabeskyttelseslinie"
-                };
                 var rules = {
                     rules: [
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'be'
                             }),
                             symbolizer: {
@@ -146,7 +62,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'bj'
                             }),
                             symbolizer: {
@@ -158,7 +74,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'bl'
                             }),
                             symbolizer: {
@@ -170,7 +86,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'ca'
                             }),
                             symbolizer: {
@@ -182,7 +98,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'cb'
                             }),
                             symbolizer: {
@@ -194,7 +110,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'cl'
                             }),
                             symbolizer: {
@@ -206,7 +122,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'cm'
                             }),
                             symbolizer: {
@@ -218,7 +134,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'ef'
                             }),
                             symbolizer: {
@@ -230,7 +146,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'eh'
                             }),
                             symbolizer: {
@@ -242,7 +158,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'eo'
                             }),
                             symbolizer: {
@@ -254,7 +170,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'la'
                             }),
                             symbolizer: {
@@ -266,7 +182,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'lb'
                             }),
                             symbolizer: {
@@ -278,7 +194,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'na'
                             }),
                             symbolizer: {
@@ -290,7 +206,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'of'
                             }),
                             symbolizer: {
@@ -302,7 +218,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'og'
                             }),
                             symbolizer: {
@@ -314,7 +230,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 're'
                             }),
                             symbolizer: {
@@ -326,7 +242,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'so'
                             }),
                             symbolizer: {
@@ -338,7 +254,7 @@
                         new OpenLayers.Rule({
                             filter: new OpenLayers.Filter.Comparison({
                                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                                property: "h",
+                                property: "h_an",
                                 value: 'ta'
                             }),
                             symbolizer: {
@@ -348,7 +264,7 @@
                             }
                         })
                     ]
-                }
+                };
                 var styleMap = new OpenLayers.StyleMap({
                     "default": new OpenLayers.Style({
                                 fillColor: "#ffffff",
@@ -402,43 +318,39 @@
                                 Proj4js.transform(source, dest, p2);
 
                                 if (layer.attributes) {
-                                    var strBem = ""
-                                    strBem += "<h2>Bestemmelser</h2><table class='table table-condensed table-striped table-responsive'>";
+                                    var strBem = "";
+                                    strBem += "<h2>Bestemmelser</h2><table  border='1' class='table table-condensed table-striped table-responsive'>";
                                     $.each(bem, function (i, v) {
-                                        if (layer.attributes[i] !== undefined && layer.attributes[i] !== null && layer.attributes[i] !== "Ingen") {
-                                            sp = layer.attributes[i].split("|");
-                                            if (__code2map(layer.attributes[i + "_code"]) !== null) {
-                                                layersForLink.push(__code2map(layer.attributes[i + "_code"]).toLowerCase());
-                                            }
+
+                                        if (layer.attributes[i] !== undefined && layer.attributes[i] !== null && ref_codes[layer.attributes[i]] !== "Ingen" && layer.attributes[i] !== "") {
+
+                                            sp = (ref_codes[layer.attributes[i]] !== undefined) ? ref_codes[layer.attributes[i]].split("|") : [layer.attributes[i]];
+
                                             if (sp.length > 1 && sp[0] !== "") {
-                                                /*v = "<span style='color: #000000'>";
-                                                 if (__code2map(layer.attributes[i + "_code"]) !== null) {
-                                                 v+= "<a href='" + __code2map(layer.attributes[i + "_code"])+"'>" + sp[0] + "</a>";
-                                                 }
-                                                 else {
-                                                 v+= sp[0];
-                                                 }*/
-                                                v = sp[0] + (__code2map(layer.attributes[i + "_code"]) !== null ? "<!--<span style='color: #ff0000'> (kort)</span>-->" : "");
-                                                //v += "</span>";
+
+                                                v = sp[0];
                                                 body = sp[1];
                                             }
                                             else if (sp.length > 1) {
                                                 body = sp[1];
                                             }
                                             else {
-                                                body = layer.attributes[i];
+                                                body = ref_codes[layer.attributes[i]] || layer.attributes[i];
                                             }
-                                            strBem += "<tr><td style='width: 50%'>" + i + "</td><td>" + layer.attributes[i] + "</td></tr>";
+                                            strBem += "<tr><td style='width: 50%'>" + v + "</td><td>" + body + "</td></tr>";
                                         }
                                     });
                                     strBem += "</table>";
                                     $("#info-bem").html(strBem);
 
-                                    strBind = "<h2>Bindninger</h2><table border='0' class='table table-condensed table-striped table-responsive'>";
+                                    strBind = "<h2>Bindninger</h2><table border='1' class='table table-condensed table-striped table-responsive'>";
                                     $.each(bind, function (i, v) {
-                                        if (layer.attributes.bindninger[i] !== undefined && layer.attributes.bindninger[i] !== null && layer.attributes.bindninger[i] !== "Ingen") {
 
-                                            sp = layer.attributes.bindninger[i].split("|");
+                                        if (layer.attributes.bindninger[i] !== undefined && layer.attributes.bindninger[i] !== null && ref_codes[layer.attributes[i]] !== "Ingen" && layer.attributes[i] !== "") {
+                                            console.log(v)
+
+                                            sp = (ref_codes[layer.attributes.bindninger[i]] !== undefined) ? ref_codes[layer.attributes.bindninger[i]].split("|") : [layer.attributes.bindninger[i]];
+
                                             if (sp.length > 1 && sp[0] !== "") {
                                                 v = "<span style='color: #000000'>" + sp[0] + "</span>";
                                                 body = sp[1];
@@ -447,17 +359,17 @@
                                                 body = sp[1];
                                             }
                                             else {
-                                                body = layer.attributes.bindninger[i];
+                                                body = ref_codes[layer.attributes.bindninger[i]] || layer.attributes.bindninger[i];
                                             }
                                             if (i === "db_bi") {
                                                 var dbArr = ["db_jb", "db_lh", "db_mb", "db_sk", "db_vejk", "db_vej", "db_vind", "db_virk"];
                                                 $.each(dbArr, function (x, db) {
                                                     if (layer.attributes.bindninger[db] !== undefined && layer.attributes.bindninger[db] !== null && layer.attributes.bindninger[db] !== "Ingen") {
-                                                        body = body + "<br>" + layer.attributes[db].split("|")[1];
+                                                        body = body + "<br>" + ref_codes[layer.attributes.bindninger[db]].split("|")[1];
                                                     }
                                                 })
                                             }
-                                            strBind += "<tr><td style='width: 50%'>" + i + "</td><td>" + layer.attributes.bindninger[i] + "</td></tr>";
+                                            strBind += "<tr><td style='width: 50%'>" + v + " (" + i +  ")</td><td>" + body + "</td></tr>";
 
                                         }
                                     });
@@ -466,15 +378,18 @@
                                     strBind += "</table>";
                                     $("#info-bind").html(strBind);
 
+
                                     strBind = "<div id=\"pgtabitem\" class=\"pgtabitem gradient\"><div class=\"pgtabheader\"><a href=\"Javascript:void(0)\" onclick=\"gc2RammeMap.initTab('bind')\">Bindninger som ikke blev fundet</a></div><div id=\"pgtabcntbind\" class=\"pgtabcontent\"><table class=\"table table-condensed table-striped table-responsive\">";
                                     strBind += "<table class='table table-condensed table-striped table-responsive'>";
                                     $.each(bind, function (i, v) {
-                                        if (layer.attributes[i] === undefined || layer.attributes[i] === null || layer.attributes[i] === "Ingen") {
-                                            strBind += "<tr><td style='width: 50%'>" + i + "</td><td>" + "Ingen" + "</td></tr>";
+
+                                        if (layer.attributes.bindninger[i] === undefined || layer.attributes.bindninger[i] === null || ref_codes[layer.attributes.bindninger[i]] === "Ingen" || layer.attributes.bindninger[i] === "") {
+                                            strBind += "<tr><td style='width: 50%'>" + v + " (" + i +  ")</td><td>" + "Ingen" + "</td></tr>";
                                         }
+
                                     });
                                     strBind += "</table>";
-                                    strBind += " </div></div>";
+                                    strBind += "</div></div>";
                                     $("#info-bind-null").html(strBind);
                                     var mapUrl = "http://webkort.esbjergkommune.dk/cbkort?selectorgroups=themecontainer%20baggrundskort&mapext=" + p1.x + " " + p1.y + " " + p2.x + " " + p2.y + "&layers=" + layersForLink.join(" ") + "&profile=borger_kommuneplan"
                                     var strMap = "<div style='float: left' id='pdf-link'></div><div style='float: right'><a target='_blank' href='" + mapUrl + "'>Link til WebKort med bindinger</a></div>";

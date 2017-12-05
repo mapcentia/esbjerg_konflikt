@@ -11,7 +11,7 @@ class Codes extends \app\inc\Model
     public function getRefs($varName, $rel = null)
     {
 
-        $arr = [
+        $arr = array(
             "bi2",
             "bebygpct",
             "hoejdebestem",
@@ -26,7 +26,7 @@ class Codes extends \app\inc\Model
             "reserv",
             "stoejbestem",
             "udvidet_anv",
-        ];
+        );
 
         if ($rel) {
             $this->getCodes($rel, false);
@@ -44,7 +44,8 @@ class Codes extends \app\inc\Model
 
 
         print("var {$varName} = ");
-        print(json_encode($this->codes));
+        print(sizeof($this->codes));
+        //print(json_encode($this->codes));
 
         die();
 
@@ -84,6 +85,12 @@ class Codes extends \app\inc\Model
 
         }
         while ($row = $this->fetchRow($res)) {
+
+            if (isset($this->codes[$row["fieldkey"]])) {
+                echo $row["fieldkey"] . ": " . $table ."\n";
+
+            }
+
             $this->codes[$row["fieldkey"]] = nl2br($row["text"]);
         }
     }
