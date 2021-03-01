@@ -8,7 +8,7 @@ class Codes extends \app\inc\Model
 {
     private $codes;
 
-    public function getRefs($varName, $rel = null)
+    public function getRefs($varName, $rel = null, $json = null)
     {
 
         $arr = array(
@@ -43,16 +43,17 @@ class Codes extends \app\inc\Model
         }
 
 
-        print("var {$varName} = ");
-        print(sizeof($this->codes));
-        //print(json_encode($this->codes));
+	if (!$json) {
+        	print("var {$varName} = ");
+        }
+        print(json_encode($this->codes));
 
         die();
 
     }
 
-    public function getFields($varName){
-            $query = "SELECT rammefelt, head FROM arealbindninger.tforms120870101008319_join";
+    public function getFields($varName, $json = false){
+        $query = "SELECT rammefelt, head FROM arealbindninger.tforms120870101008319_join";
 
         $res = $this->prepare($query);
         try {
@@ -63,8 +64,10 @@ class Codes extends \app\inc\Model
         while ($row = $this->fetchRow($res)) {
             $this->codes[$row["rammefelt"]] = $row["head"];
         }
-
-        print("var {$varName} = ");
+	
+	if (!$json) {
+        	print("var {$varName} = ");
+        }
         print(json_encode($this->codes));
 
         die();

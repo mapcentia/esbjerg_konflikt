@@ -17,7 +17,7 @@ class Search extends \app\inc\Controller
     {
         $this->search = new \app\models\Search();
 
-        return ["data" => $this->search->go(Input::getPath()->part(4))];
+        return array("data" => $this->search->go(Input::getPath()->part(4)));
     }
 
 }

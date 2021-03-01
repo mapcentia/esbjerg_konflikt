@@ -99,7 +99,7 @@ class Database extends \app\inc\Model
 
     public function listAllSchemas()
     {
-        $arr = [];
+        $arr = array();
         $sql = "SELECT count(*) AS count,f_table_schema FROM geometry_columns GROUP BY f_table_schema";
         $res = $this->prepare($sql);
         try {

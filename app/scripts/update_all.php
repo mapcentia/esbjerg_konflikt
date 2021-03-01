@@ -9,14 +9,14 @@ include_once("../conf/App.php");
 new \app\conf\App();
 Database::setDb("esbjerg");
 $conn = new \app\inc\Model();
-$sql = "SELECT * FROM kommuneplan18.kpplandk2";
+$sql = "SELECT * FROM kommuneplan18.kpplandk2_view";
 $result = $conn->execQuery($sql);
 echo $conn->PDOerror[0];
 $count = 0;
 $search = new \app\models\Search();
 
 while ($row = $conn->fetchRow($result)) {
-    $res = $search->go($row["enrid"]);
+    $res = $search->go($row["planid"]);
 
     print_r($res);
 

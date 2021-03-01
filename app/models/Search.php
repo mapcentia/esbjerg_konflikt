@@ -10,10 +10,9 @@ class Search extends \app\inc\Model
 
     public function go($id, $overwrite = true)
     {
-        $bindings = [];
+        $bindings = array();
 
-
-        $query = "SELECT * FROM kommuneplan18.bindninger WHERE enrid =:id";
+        $query = "SELECT * FROM kommuneplan18.bindninger_planid WHERE planid=:id";
         $res = $this->prepare($query);
         try {
             $res->execute(array("id" => $id));
@@ -30,7 +29,7 @@ class Search extends \app\inc\Model
         if (($overwrite) || (!$exist)) {
 
 
-            $query = "SELECT ST_Astext(the_geom) as wkt FROM kommuneplan18.kpplandk2 WHERE enrid =:id";
+            $query = "SELECT ST_Astext(the_geom) as wkt FROM kommuneplan18.kpplandk2 WHERE planid=:id";
             $res = $this->prepare($query);
             try {
                 $res->execute(array("id" => $id));
@@ -44,7 +43,7 @@ class Search extends \app\inc\Model
             $response['success'] = true;
             $response['data'] = $row["wkt"];
 
-            $service = "http://webkort.esbjergkommune.dk/cbkort?";
+            $service = "https://webkort.esbjergkommune.dk/cbkort?";
             $qstr = "page=fkgws1-konflikt&sagstype=std_soegning&outputformat=json&raw=false&geometri=" . urlencode($response['data']);
 
             $url = $service . $qstr;
@@ -78,7 +77,7 @@ class Search extends \app\inc\Model
 
                 foreach ($res["row"][0]["row"][0]["row"] as $resArr) {
 
-                    $attrs = [];
+                    $attrs = array();
                     for ($i = 0; $i < sizeof($resArr["row"]); $i++) {
                         if (isset($resArr["row"][$i]["targetname"])) {
                             $targetname = $resArr["row"][$i]["targetname"];
@@ -97,9 +96,9 @@ class Search extends \app\inc\Model
                         }
                     }
                     if (sizeof($attrs) > 0) {
-                        echo $theme["sps_themename"] . " -> " . $theme["bindattribut"] . "\n";
-                        print_r($attrs);
-                        print_r($resArr);
+                        //echo $theme["sps_themename"] . " -> " . $theme["bindattribut"] . "\n";
+                        //print_r($attrs);
+                        //print_r($resArr);
 
                     }
 
@@ -129,7 +128,7 @@ class Search extends \app\inc\Model
             arsort($bindings);
 
 
-            $query = "DELETE FROM kommuneplan18.bindninger WHERE enrid =:id";
+            $query = "DELETE FROM kommuneplan18.bindninger_planid WHERE planid=:id";
             $res = $this->prepare($query);
             try {
                 $res->execute(array("id" => $id));
@@ -137,7 +136,7 @@ class Search extends \app\inc\Model
                 echo "Fandtes ikke\n";
             }
 
-            $query = "INSERT INTO kommuneplan18.bindninger (enrid, bindninger) VALUES (:id, :bindninger)";
+            $query = "INSERT INTO kommuneplan18.bindninger_planid (planid,bindninger) VALUES (:id, :bindninger)";
             $res = $this->prepare($query);
             try {
                 $res->execute(array("id" => $id, "bindninger" => json_encode($bindings)));

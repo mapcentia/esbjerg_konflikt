@@ -19,18 +19,20 @@ class Codes extends \app\inc\Controller
     {
 
         $varName = Input::get("vn");
+        $json = Input::get("json");
         $this->codes = new \app\models\Codes();
 
-        return ["data" => $this->codes->getRefs($varName)];
+        return array("data" => $this->codes->getRefs($varName, null, $json));
     }
 
     public function get_field()
     {
 
         $varName = Input::get("vn");
+        $json = Input::get("json");
         $this->codes = new \app\models\Codes();
 
-        return ["data" => $this->codes->getFields($varName, Input::getPath()->part(4))];
+        return array("data" => $this->codes->getFields($varName, $json));
     }
 
 }

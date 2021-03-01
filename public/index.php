@@ -2,6 +2,8 @@
 ini_set("display_errors", "Off");
 ini_set('memory_limit', '256M');
 error_reporting(3);
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+
 
 use \app\inc\Route;
 
@@ -10,7 +12,7 @@ new \app\conf\App();
 // Set the host name
 include_once("../app/conf/hosts.php");
 
-Route::add("api/v1/searchall");
+//Route::add("api/v1/searchall");
 Route::add("api/v1/search");
 Route::add("api/v1/codes");
 
